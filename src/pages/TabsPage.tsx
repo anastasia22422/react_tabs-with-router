@@ -1,5 +1,5 @@
-import cn from 'classnames';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Tabs } from '../components/Tabs';
 
 const tabs = [
   { id: 'tab-1', title: 'Tab 1', content: 'Some text 1' },
@@ -8,34 +8,15 @@ const tabs = [
 ];
 
 export const TabsPage = () => {
-  const { tabId } = useParams();
-
-  const currentTab = tabs.find(tab => tab.id === tabId);
+  const { tabId } = useParams<{ tabId?: string }>();
+  const activeTab = tabs.find(tab => tab.id === tabId);
 
   return (
     <>
       <h1 className="title">Tabs page</h1>
-
-      <div className="tabs is-boxed">
-        <ul>
-          {tabs.map(tab => {
-            const isCurrentTab = tabId === tab.id;
-
-            return (
-              <li
-                key={tab.id}
-                data-cy="Tab"
-                className={cn({ 'is-active': isCurrentTab })}
-              >
-                <Link to={`/tabs/${tab.id}`}>{tab.title}</Link>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-
+      <Tabs tabs={tabs} activeTabId={tabId} />
       <div className="block" data-cy="TabContent">
-        {currentTab ? currentTab.content : 'Please select a tab'}
+        {tabId && activeTab ? activeTab.content : 'Please select a tab'}
       </div>
     </>
   );
